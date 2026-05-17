@@ -35,7 +35,7 @@ export function Header() {
       {/* CTA */}
       <div className="flex items-center gap-3">
         <a
-          href="https://github.com"
+          href="https://github.com/ernsimsek"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-white/8 text-white/40 hover:text-[#00d4ff] transition-all text-sm hover:border-[#00d4ff]/30"
