@@ -14,7 +14,7 @@ import {
   Calendar,
   Lock,
 } from "lucide-react";
-import { ShortLink, toggleLinkStatus, deleteLink } from "@/lib/store";
+import { ShortLink, resolveShortUrl, toggleLinkStatus, deleteLink } from "@/lib/store";
 import { copyToClipboard, getFavicon, getDomain, timeAgo, getTagColor, formatNumber } from "@/lib/utils";
 import { QRModal } from "./QRModal";
 import { StatsChart } from "./StatsChart";
@@ -35,16 +35,18 @@ export function LinkCard({ link, onDelete, onToggle, onCopy }: LinkCardProps) {
 
   const isExpired = link.expiresAt && new Date(link.expiresAt) < new Date();
 
+  const shortUrl = resolveShortUrl(link);
+
   const handleCopy = async () => {
-    await copyToClipboard(link.shortUrl);
+    await copyToClipboard(shortUrl);
     setCopied(true);
     onCopy("Copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirmDelete) {
-      deleteLink(link.id);
+      await deleteLink(link.id);
       onDelete(link.id);
     } else {
       setConfirmDelete(true);
@@ -52,8 +54,8 @@ export function LinkCard({ link, onDelete, onToggle, onCopy }: LinkCardProps) {
     }
   };
 
-  const handleToggle = () => {
-    toggleLinkStatus(link.id);
+  const handleToggle = async () => {
+    await toggleLinkStatus(link.id);
     onToggle(link.id);
   };
 
@@ -247,7 +249,7 @@ export function LinkCard({ link, onDelete, onToggle, onCopy }: LinkCardProps) {
 
       {showQR && (
         <QRModal
-          url={link.shortUrl}
+          url={shortUrl}
           title={link.title || link.slug}
           onClose={() => setShowQR(false)}
         />

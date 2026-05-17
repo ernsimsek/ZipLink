@@ -46,9 +46,8 @@ export function ShortenForm({ onCreated, onError }: ShortenFormProps) {
     }
 
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 400)); // simulate async
 
-    const result = createLink({
+    const result = await createLink({
       originalUrl: normalized,
       customSlug: customSlug.trim() || undefined,
       title: title.trim() || undefined,

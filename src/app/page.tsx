@@ -26,27 +26,38 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const { toasts, addToast, removeToast } = useToast();
 
+  const refreshLinks = useCallback(async () => {
+    const list = await getAllLinks();
+    setLinks(list);
+  }, []);
+
   useEffect(() => {
     setMounted(true);
-    setLinks(getAllLinks());
-  }, []);
+    refreshLinks();
+  }, [refreshLinks]);
 
-  const stats = mounted ? getStats() : { totalLinks: 0, totalClicks: 0, activeLinks: 0 };
+  const stats = mounted ? getStats(links) : { totalLinks: 0, totalClicks: 0, activeLinks: 0 };
 
-  const handleCreated = useCallback((link: ShortLink) => {
-    setNewLink(link);
-    setLinks(getAllLinks());
-    addToast("Link zipped successfully!", "success");
-  }, [addToast]);
+  const handleCreated = useCallback(
+    (link: ShortLink) => {
+      setNewLink(link);
+      refreshLinks();
+      addToast("Link zipped successfully!", "success");
+    },
+    [addToast, refreshLinks]
+  );
 
-  const handleDelete = useCallback((_id: string) => {
-    setLinks(getAllLinks());
-    addToast("Link deleted.", "info");
-  }, [addToast]);
+  const handleDelete = useCallback(
+    (_id: string) => {
+      refreshLinks();
+      addToast("Link deleted.", "info");
+    },
+    [addToast, refreshLinks]
+  );
 
   const handleToggle = useCallback(() => {
-    setLinks(getAllLinks());
-  }, []);
+    refreshLinks();
+  }, [refreshLinks]);
 
   const handleCopy = useCallback((msg: string) => {
     addToast(msg, "success");

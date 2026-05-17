@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy, QrCode, X, ExternalLink } from "lucide-react";
-import { ShortLink } from "@/lib/store";
+import { ShortLink, resolveShortUrl } from "@/lib/store";
 import { copyToClipboard } from "@/lib/utils";
 import { QRModal } from "./QRModal";
 
@@ -15,9 +15,10 @@ interface SuccessBannerProps {
 export function SuccessBanner({ link, onDismiss, onCopy }: SuccessBannerProps) {
   const [copied, setCopied] = useState(false);
   const [showQR, setShowQR] = useState(false);
+  const shortUrl = resolveShortUrl(link);
 
   const handleCopy = async () => {
-    await copyToClipboard(link.shortUrl);
+    await copyToClipboard(shortUrl);
     setCopied(true);
     onCopy("Copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
@@ -55,7 +56,7 @@ export function SuccessBanner({ link, onDismiss, onCopy }: SuccessBannerProps) {
             </p>
             <div className="flex items-center gap-3 flex-wrap">
               <span className="text-lg font-medium" style={{ color: "#00d4ff", fontFamily: "var(--font-mono)", textShadow: "0 0 20px rgba(0,212,255,0.5)" }}>
-                {link.shortUrl}
+                {shortUrl}
               </span>
             </div>
             <p className="text-xs mt-1 truncate" style={{ color: "rgba(226,240,255,0.35)", fontFamily: "var(--font-body)" }}>
@@ -116,7 +117,7 @@ export function SuccessBanner({ link, onDismiss, onCopy }: SuccessBannerProps) {
 
       {showQR && (
         <QRModal
-          url={link.shortUrl}
+          url={shortUrl}
           title={link.title || link.slug}
           onClose={() => setShowQR(false)}
         />

@@ -41,20 +41,14 @@ npm run dev
 | Styling | Tailwind CSS |
 | Icons | [Lucide React](https://lucide.dev/) |
 | QR codes | [`qrcode`](https://www.npmjs.com/package/qrcode) |
-| Storage | Browser `localStorage` (no database required) |
+| Storage | [Upstash Redis](https://upstash.com/) (links work on any device) |
 | Fonts | Bebas Neue, DM Sans, DM Mono |
 
-## Important: How Storage Works
+## Storage (required for QR / mobile)
 
-Links are stored in the **browser’s `localStorage`**. There is no backend or database.
+Short links are saved in **Upstash Redis** so anyone can open `yoursite.com/abc123` from a phone, QR code, or another computer.
 
-| Benefit | Trade-off |
-|---------|-----------|
-| Zero setup — works offline after first load | Links exist only in the browser where they were created |
-| No API keys or hosting costs for data | Clearing site data removes all links |
-| Great for demos and personal use | Short URLs shared with others **will not resolve** on other devices until you add a shared backend |
-
-For a production deployment where anyone can open `yoursite.com/abc123`, you will need persistent server-side storage (e.g. Supabase, PlanetScale, Upstash Redis, or a simple API + database).
+Without Redis, the app cannot resolve links on other devices.
 
 ## Getting Started
 
@@ -82,12 +76,12 @@ cp .env.local.example .env.local
 Edit `.env.local`:
 
 ```env
-# Local development
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
-
-# Production (use your real domain)
-# NEXT_PUBLIC_BASE_URL=https://your-domain.com
+UPSTASH_REDIS_REST_URL=https://xxxx.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your_token
 ```
+
+On Vercel, `NEXT_PUBLIC_BASE_URL` is optional if you use the default `*.vercel.app` domain (`VERCEL_URL` is used automatically).
 
 ### Scripts
 
@@ -102,10 +96,10 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 ### Vercel (recommended)
 
-1. Push this repository to GitHub.
-2. Import the project at [vercel.com/new](https://vercel.com/new).
-3. Add environment variable: `NEXT_PUBLIC_BASE_URL` = your Vercel URL (or custom domain).
-4. Deploy.
+1. Push this repository to GitHub and import at [vercel.com/new](https://vercel.com/new).
+2. **Storage → Create Database → Upstash Redis** (or connect an existing Upstash database). Vercel injects `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`.
+3. Optional: `NEXT_PUBLIC_BASE_URL` = `https://your-project.vercel.app` (or your custom domain).
+4. Redeploy, then **create links again** (old local-only links are not migrated).
 
 ### Other platforms
 
