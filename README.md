@@ -160,10 +160,9 @@ src/
 - **Accent**: `#ff4d1c` (ember red)
 - **Background**: dark ink palette (`#0e0e0c` → `#f0f0ef`)
 
+<img width="1918" height="882" alt="image" src="https://github.com/user-attachments/assets/3ef229fb-2d61-4a3f-b584-7a8aa8493e75" />
+
 ## License
 
 MIT — free for personal and commercial use. See [LICENSE](LICENSE) if present, or add a standard MIT `LICENSE` file when publishing.
 
-## Author
-
-Built by [@YOUR_USERNAME](https://github.com/YOUR_USERNAME). Replace with your GitHub profile when you publish.
